@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 import Swal from 'sweetalert2';
 import SlideshowCSS from './SlideshowCSS';
@@ -45,12 +45,7 @@ const BirthdayPage = () => {
     }
   ];
 
-  useEffect(() => {
-    launchConfetti();
-    calculateBirthdayFacts();
-  }, []);
-
-  const launchConfetti = () => {
+  const launchConfetti = useCallback(() => {
     confetti({
       particleCount: 100,
       spread: 70,
@@ -74,20 +69,9 @@ const BirthdayPage = () => {
         origin: { x: 1 }
       });
     }, 400);
-  };
+  }, []);
 
-  const calculateBirthdayFacts = () => {
-    const age = 25;
-    const ageDays = age * 365;
-    const ageHours = ageDays * 24;
-    const heartbeats = ageDays * 100000;
-    
-    animateNumber('ageDays', ageDays);
-    animateNumber('ageHours', ageHours);
-    animateNumber('heartbeats', heartbeats);
-  };
-
-  const animateNumber = (type, finalNumber) => {
+  const animateNumber = useCallback((type, finalNumber) => {
     const duration = 2000;
     const steps = 60;
     const increment = finalNumber / steps;
@@ -104,7 +88,23 @@ const BirthdayPage = () => {
         [type]: Math.floor(current).toLocaleString()
       }));
     }, duration / steps);
-  };
+  }, []);
+
+  const calculateBirthdayFacts = useCallback(() => {
+    const age = 25;
+    const ageDays = age * 365;
+    const ageHours = ageDays * 24;
+    const heartbeats = ageDays * 100000;
+    
+    animateNumber('ageDays', ageDays);
+    animateNumber('ageHours', ageHours);
+    animateNumber('heartbeats', heartbeats);
+  }, [animateNumber]);
+
+  useEffect(() => {
+    launchConfetti();
+    calculateBirthdayFacts();
+  }, [launchConfetti, calculateBirthdayFacts]);
 
   const showMemories = () => {
     const randomMemory = memories[Math.floor(Math.random() * memories.length)];

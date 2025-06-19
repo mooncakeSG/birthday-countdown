@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import CountdownPage from './components/CountdownPage';
 import BirthdayPage from './components/BirthdayPage';
@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('countdown');
-  const birthdayDate = new Date('2025-10-31T00:00:00'); // Updated to October 31st 2025 for Che-Lynn
+  const birthdayDate = useMemo(() => new Date('2025-10-31T00:00:00'), []); // Updated to October 31st 2025 for Che-Lynn
 
   useEffect(() => {
     const checkBirthdayTime = () => {

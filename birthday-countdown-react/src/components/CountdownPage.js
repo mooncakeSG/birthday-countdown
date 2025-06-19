@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 
 const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
   const [timeLeft, setTimeLeft] = useState({
@@ -11,7 +11,7 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
   const [dailyMessage, setDailyMessage] = useState('');
 
   // Daily messages object - organized by date
-  const dailyMessages = {
+  const dailyMessages = useMemo(() => ({
     // June 2025
     '2025-06-19': "Hey my sweet drama queen 😭🫂, just thinking about how you make even the messiest days feel cozy. Can't wait to hold you tight soon ❤️. Also, maybe let the vacuum rest today? 😅",
     '2025-06-20': "Late night Instagram scrolls with you in my mind... how do you always find the cutest stories? 😍 Missing our little talks already. Sending you a virtual hug 🫂❤️",
@@ -54,9 +54,9 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
     '2025-10-29': "2 days until your birthday! Your cleaning frenzy is probably in overdrive preparing for celebration mode 😅🧹",
     '2025-10-30': "1 day until your birthday! Tomorrow we celebrate the most amazing, caring, dramatically perfect person ever 😭❤️ I'm so ready to spoil you!",
     '2025-10-31': "HAPPY BIRTHDAY CHE-LYNN! 🎂✨👑 Today is all about celebrating YOU - your beautiful heart, your caring spirit, your dramatic perfection, and the way you make everything feel like home. You deserve all the love, all the joy, and all the perfectly organized birthday magic! Here's to another year of your wonderful chaos 😭❤️🫂 I love you so much it makes me dramatic too!"
-  };
+  }), []);
 
-  const getDailyMessage = () => {
+  const getDailyMessage = useCallback(() => {
     const today = new Date();
     const dateString = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
     
@@ -79,7 +79,7 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
     } else {
       return "Thinking of you today and always 💕 Your beautiful heart makes every day brighter, and something wonderful awaits! ✨💫";
     }
-  };
+  }, [dailyMessages]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -103,7 +103,7 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
     setDailyMessage(getDailyMessage());
 
     return () => clearInterval(timer);
-  }, [birthdayDate, onBirthdayReached]);
+  }, [birthdayDate, onBirthdayReached, getDailyMessage]);
 
   const isOctoberCountdown = () => {
     const today = new Date();
