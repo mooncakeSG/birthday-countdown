@@ -11,6 +11,8 @@ const BirthdayPage = () => {
   });
 
   const [videoError, setVideoError] = useState(false);
+  const [spotifyError, setSpotifyError] = useState(false);
+  const [spotifyLoaded, setSpotifyLoaded] = useState(false);
 
   const memories = [
     {
@@ -150,6 +152,25 @@ const BirthdayPage = () => {
     setVideoError(true);
   };
 
+  const handleSpotifyError = () => {
+    setSpotifyError(true);
+  };
+
+  const handleSpotifyLoad = () => {
+    setSpotifyLoaded(true);
+  };
+
+  // Auto-fallback if Spotify doesn't load within 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!spotifyLoaded && !spotifyError) {
+        setSpotifyError(true);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [spotifyLoaded, spotifyError]);
+
   const VideoFallback = () => (
     <div className="video-fallback" style={{
       background: 'linear-gradient(135deg, #ff6b9d, #ffa8cc)',
@@ -170,6 +191,48 @@ const BirthdayPage = () => {
         <br />
         <small>(Video temporarily unavailable)</small>
       </p>
+    </div>
+  );
+
+  const SpotifyFallback = () => (
+    <div className="spotify-fallback" style={{
+      background: 'linear-gradient(135deg, #1db954, #1ed760)',
+      borderRadius: '12px',
+      padding: '2rem',
+      color: 'white',
+      textAlign: 'center',
+      minHeight: '300px',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
+      <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎵</div>
+      <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>Your Birthday Playlist</h3>
+      <p style={{ marginBottom: '1.5rem', opacity: 0.9, lineHeight: '1.6' }}>
+        A special collection of songs to celebrate you! 💕
+      </p>
+      <div style={{ 
+        background: 'rgba(255,255,255,0.1)', 
+        borderRadius: '8px', 
+        padding: '1rem',
+        marginBottom: '1rem',
+        width: '100%',
+        maxWidth: '300px'
+      }}>
+        <div style={{ marginBottom: '0.8rem', fontSize: '1.1rem', fontWeight: 'bold' }}>
+          🌟 Featured Song 🌟
+        </div>
+        <div style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>
+          "Constellations" - Your special song ✨
+        </div>
+        <div style={{ fontSize: '0.9rem', opacity: 0.8 }}>
+          Perfect for celebrating beautiful moments 💫
+        </div>
+      </div>
+      <div style={{ fontSize: '0.9rem', opacity: 0.8 }}>
+        🎧 Open your favorite music app and search for these vibes! 🎧
+      </div>
     </div>
   );
 
@@ -273,22 +336,30 @@ const BirthdayPage = () => {
             <div className="card-content">
               <div className="spotify-embed">
                 <p className="spotify-intro">🎵 Starting with "Constellations" - your special song! 🎵</p>
-                <iframe 
-                  style={{borderRadius: '12px'}} 
-                  src="https://open.spotify.com/embed/playlist/5KX0iHFwZONKRI960A7mMg?utm_source=generator" 
-                  width="100%" 
-                  height="352" 
-                  frameBorder="0" 
-                  allowFullScreen="" 
-                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                  loading="lazy"
-                  title="Birthday Playlist"
-                ></iframe>
-                <p className="spotify-note">
-                  💡 Click play to start with "Constellations"! 
-                  <br/>
-                  <small>(Spotify requires user interaction to start playing)</small>
-                </p>
+                {spotifyError ? (
+                  <SpotifyFallback />
+                ) : (
+                  <>
+                    <iframe 
+                      style={{borderRadius: '12px'}} 
+                      src="https://open.spotify.com/embed/track/4uLU6hMCjMI75M1A2tKUQC?utm_source=generator" 
+                      width="100%" 
+                      height="352" 
+                      frameBorder="0" 
+                      allowFullScreen="" 
+                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                      loading="lazy"
+                      title="Birthday Music"
+                      onError={handleSpotifyError}
+                      onLoad={handleSpotifyLoad}
+                    ></iframe>
+                    <p className="spotify-note">
+                      💡 Click play to start with "Constellations"! 
+                      <br/>
+                      <small>(Spotify requires user interaction to start playing)</small>
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </div>
