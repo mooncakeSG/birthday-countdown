@@ -5,10 +5,12 @@ import SlideshowCSS from './SlideshowCSS';
 
 const BirthdayPage = () => {
   const [birthdayFacts, setBirthdayFacts] = useState({
-    ageDays: 0,
-    ageHours: 0,
-    heartbeats: 0
+    ageDays: '0',
+    ageHours: '0',
+    heartbeats: '0'
   });
+
+  const [videoError, setVideoError] = useState(false);
 
   const memories = [
     {
@@ -144,6 +146,33 @@ const BirthdayPage = () => {
     });
   };
 
+  const handleVideoError = () => {
+    setVideoError(true);
+  };
+
+  const VideoFallback = () => (
+    <div className="video-fallback" style={{
+      background: 'linear-gradient(135deg, #ff6b9d, #ffa8cc)',
+      height: '300px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: '0.8rem',
+      color: 'white',
+      textAlign: 'center',
+      padding: '2rem'
+    }}>
+      <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>💕</div>
+      <h3 style={{ marginBottom: '0.5rem', fontSize: '1.5rem' }}>Our First Date Memory</h3>
+      <p style={{ opacity: 0.9, fontSize: '1rem', lineHeight: '1.5' }}>
+        A beautiful video of our special moment together 💫
+        <br />
+        <small>(Video temporarily unavailable)</small>
+      </p>
+    </div>
+  );
+
   return (
     <div className="birthday-page">
       <div className="floating-hearts celebration">
@@ -184,20 +213,28 @@ const BirthdayPage = () => {
               </p>
             </div>
             <div className="video-container">
-              <video 
-                className="memory-video"
-                controls
-                preload="metadata"
-                poster="/images/photo1.jpg"
-              >
-                <source src="/video.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-              <div className="video-overlay">
-                <div className="play-button-overlay">
-                  <i className="fas fa-play"></i>
-                </div>
-              </div>
+              {videoError ? (
+                <VideoFallback />
+              ) : (
+                <>
+                  <video 
+                    className="memory-video"
+                    controls
+                    preload="metadata"
+                    poster="/images/photo1.jpg"
+                    onError={handleVideoError}
+                  >
+                    <source src="/video.mp4" type="video/mp4" />
+                    <source src="./video.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                  <div className="video-overlay">
+                    <div className="play-button-overlay">
+                      <i className="fas fa-play"></i>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
             <div className="video-footer">
               <div className="video-description">
