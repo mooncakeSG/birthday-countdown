@@ -335,26 +335,26 @@ const BirthdayPage = () => {
             </div>
             <div className="card-content">
               <div className="spotify-embed">
-                <p className="spotify-intro">🎵 Starting with "Constellations" - your special song! 🎵</p>
+                <p className="spotify-intro">🎵 A special playlist for your birthday! 🎵</p>
                 {spotifyError ? (
                   <SpotifyFallback />
                 ) : (
                   <>
                     <iframe 
                       style={{borderRadius: '12px'}} 
-                      src="https://open.spotify.com/embed/track/4uLU6hMCjMI75M1A2tKUQC?utm_source=generator" 
+                      src="https://open.spotify.com/embed/playlist/5KX0iHFwZONKRI960A7mMg?utm_source=generator&theme=0" 
                       width="100%" 
                       height="352" 
                       frameBorder="0" 
                       allowFullScreen="" 
                       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
                       loading="lazy"
-                      title="Birthday Music"
+                      title="Birthday Playlist"
                       onError={handleSpotifyError}
                       onLoad={handleSpotifyLoad}
                     ></iframe>
                     <p className="spotify-note">
-                      💡 Click play to start with "Constellations"! 
+                      💡 Click play to start the music!
                       <br/>
                       <small>(Spotify requires user interaction to start playing)</small>
                     </p>
