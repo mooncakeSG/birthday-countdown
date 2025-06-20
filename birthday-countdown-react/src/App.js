@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('countdown');
-  const birthdayDate = useMemo(() => new Date('2024-10-31T00:00:00'), []); // Updated to October 31st 2024 for Che-Lynn
+  const birthdayDate = useMemo(() => new Date('2025-10-31T00:00:00'), []); // Updated to October 31st 2025 for Che-Lynn
 
   useEffect(() => {
     const checkBirthdayTime = () => {

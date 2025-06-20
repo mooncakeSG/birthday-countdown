@@ -1354,6 +1354,598 @@ body {
 }
 
 @keyframes badgePulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* New Interactive Features Styles */
+
+/* Emoji Rain Animation */
+.emoji-rain {
+  position: absolute;
+  font-size: 24px;
+  animation: emojiRainFall 4s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.emoji-rain:nth-child(9) { left: 5%; animation-delay: 0s; }
+.emoji-rain:nth-child(10) { left: 15%; animation-delay: 0.5s; }
+.emoji-rain:nth-child(11) { left: 25%; animation-delay: 1s; }
+.emoji-rain:nth-child(12) { left: 35%; animation-delay: 1.5s; }
+.emoji-rain:nth-child(13) { left: 45%; animation-delay: 2s; }
+.emoji-rain:nth-child(14) { left: 55%; animation-delay: 2.5s; }
+.emoji-rain:nth-child(15) { left: 65%; animation-delay: 3s; }
+.emoji-rain:nth-child(16) { left: 75%; animation-delay: 3.5s; }
+
+@keyframes emojiRainFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Hug & Kiss Counter Card */
+.hug-kiss-card {
+  background: linear-gradient(135deg, #ff6b9d, #ffa8cc);
+  color: white;
+}
+
+.hug-kiss-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  flex: 1;
+  transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-5px);
+}
+
+.stat-emoji {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  opacity: 0.9;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.interaction-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.hug-btn, .kiss-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.hug-btn {
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+  color: #d63384;
+}
+
+.hug-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 154, 158, 0.4);
+}
+
+.kiss-btn {
+  background: linear-gradient(45deg, #ffeef8, #f093fb);
+  color: #d63384;
+}
+
+.kiss-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+}
+
+.repayment-note {
+  font-size: 0.9rem;
+  text-align: center;
+  opacity: 0.9;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Emoji Personality Gallery Card */
+.emoji-card {
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
+  color: #2c3e50;
+}
+
+.emoji-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.emoji-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.emoji-item:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.big-emoji {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+  animation: emojiFloat 2s ease-in-out infinite alternate;
+}
+
+.emoji-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+@keyframes emojiFloat {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-5px); }
+}
+
+.emoji-celebration-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(45deg, #ff6b9d, #ffa8cc);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.emoji-celebration-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(255, 107, 157, 0.4);
+}
+
+.emoji-note {
+  text-align: center;
+  font-style: italic;
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+/* Cozy Moments Card */
+.cozy-card {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.cozy-items {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.cozy-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  gap: 15px;
+}
+
+.cozy-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+}
+
+.cozy-item i {
+  font-size: 1.5rem;
+  color: #ffd700;
+  min-width: 30px;
+}
+
+.cozy-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cozy-text strong {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.cozy-text small {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.cozy-note {
+  text-align: center;
+  font-style: italic;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+/* Mobile Responsiveness for New Features */
+@media (max-width: 768px) {
+  .hug-kiss-stats {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .interaction-buttons {
+    flex-direction: column;
+  }
+  
+  .hug-btn, .kiss-btn {
+    min-width: 100%;
+  }
+  
+  .emoji-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .big-emoji {
+    font-size: 2rem;
+  }
+  
+  .cozy-item {
+    padding: 12px;
+  }
+  
+  .stat-emoji {
+    font-size: 1.5rem;
+  }
+  
+  .stat-number {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .emoji-gallery {
+    grid-template-columns: 1fr;
+  }
+  
+  .big-emoji {
+    font-size: 1.8rem;
+  }
+  
+  .cozy-item {
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .cozy-item i {
+    font-size: 1.2rem;
+  }
+  
+  .stat-item {
+    padding: 10px;
+  }
+}
+
+/* Countdown Page Interactive Features */
+
+.interactive-section {
+  margin-top: 3rem;
+  padding: 0 1rem;
+}
+
+.interactive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.interactive-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.interactive-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.interactive-card.cozy-mode {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.interactive-card.cozy-mode.active {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(245, 158, 11, 0.15) 100%);
+  border-color: rgba(245, 158, 11, 0.6);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+.interactive-card .card-header h3 {
+  color: #fff;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.interactive-card .card-header h3 i {
+  margin-right: 0.5rem;
+  color: #ec4899;
+}
+
+.interactive-btn {
+  background: linear-gradient(135deg, #ec4899 0%, #d63384 100%);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0.5rem 0;
+  display: inline-block;
+  min-width: 180px;
+}
+
+.interactive-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4);
+  background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+}
+
+.interactive-btn:active {
+  transform: translateY(0);
+}
+
+/* Miss You Card */
+.miss-you-card .card-header h3 i {
+  color: #ef4444;
+}
+
+.miss-counter {
+  margin-bottom: 1rem;
+}
+
+.counter-number {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ef4444;
+  line-height: 1;
+}
+
+.counter-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+.miss-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.miss-btn:hover {
+  background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* Drama Card */
+.drama-card .card-header h3 i {
+  color: #8b5cf6;
+}
+
+.drama-btn {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+}
+
+.drama-btn:hover {
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+}
+
+.drama-moments {
+  margin-top: 1rem;
+  min-height: 60px;
+}
+
+.drama-item {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 10px;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+}
+
+/* Cozy Card */
+.cozy-card .card-header h3 i {
+  color: #f59e0b;
+}
+
+.cozy-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.cozy-btn:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+}
+
+.cozy-status {
+  margin: 1rem 0;
+}
+
+.status-indicator {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.status-indicator.active {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.5);
+  color: #fbbf24;
+  animation: cozyGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes cozyGlow {
+  from {
+    box-shadow: 0 0 5px rgba(245, 158, 11, 0.3);
+  }
+  to {
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+  }
+}
+
+/* Surprise Card */
+.surprise-card .card-header h3 i {
+  color: #ec4899;
+}
+
+.surprise-card.revealed {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
+  border-color: rgba(236, 72, 153, 0.4);
+}
+
+.surprise-btn {
+  background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+}
+
+.surprise-btn:hover {
+  background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+  box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4);
+}
+
+.surprise-preview {
+  margin-top: 1rem;
+  animation: surpriseReveal 0.5s ease-out;
+}
+
+.surprise-items {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.surprise-item {
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  border-radius: 8px;
+  padding: 0.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+}
+
+@keyframes surpriseReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  font-style: italic;
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .interactive-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .interactive-card {
+    padding: 1rem;
+  }
+  
+  .interactive-btn {
+    min-width: 150px;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.8rem;
+  }
+  
+  .counter-number {
+    font-size: 2rem;
+  }
 }

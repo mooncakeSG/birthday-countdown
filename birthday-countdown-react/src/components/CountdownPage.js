@@ -9,6 +9,11 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
   });
 
   const [dailyMessage, setDailyMessage] = useState('');
+  
+  // New interactive features based on chat history
+  const [missYouCount, setMissYouCount] = useState(0);
+  const [dramaMoments, setDramaMoments] = useState([]);
+  const [cozyVibes, setCozyVibes] = useState(false);
 
   // Daily messages object - organized by date
   const dailyMessages = useMemo(() => ({
@@ -80,6 +85,104 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
       return "Thinking of you today and always 💕 Your beautiful heart makes every day brighter, and something wonderful awaits! ✨💫";
     }
   }, [dailyMessages]);
+
+  // New interactive functions based on chat history
+  const sendMissYou = () => {
+    setMissYouCount(prev => prev + 1);
+    const responses = [
+      "I miss you too... so much it hurts &#128557;",
+      "Why do you have to be so far away? &#129397;",
+      "I wish I could teleport to you right now &#129303;",
+      "Missing you is my full-time job apparently &#128584;",
+      "Your absence is the only thing that makes me dramatic &#128557;"
+    ];
+    
+    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+    
+    // Show sweet popup
+    if (window.Swal) {
+      window.Swal.fire({
+        title: '&#128557; Missing You Too...',
+        html: `
+          <div style="text-align: center; padding: 20px;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">&#129303;</div>
+            <p style="font-size: 1.1rem; color: #d63384; margin-bottom: 1rem;">
+              ${randomResponse}
+            </p>
+            <p style="font-style: italic; color: #666; font-size: 0.9rem;">
+              Miss you count: ${missYouCount + 1} times today
+            </p>
+          </div>
+        `,
+        confirmButtonText: "&#128557; Same energy",
+        confirmButtonColor: '#d63384',
+        timer: 4000,
+        timerProgressBar: true
+      });
+    }
+  };
+
+  const triggerDramaMoment = () => {
+    const dramaQuotes = [
+      "When you said 'I'm fine' but we both know you're not &#129397;",
+      "The way you cry at literally everything cute &#128557;",
+      "Your dramatic gasps during movies &#128561;",
+      "When you get emotional about organizing things &#128557;&#129303;",
+      "Your reaction to surprise gestures &#128557;&#128149;"
+    ];
+    
+    const newDrama = dramaQuotes[Math.floor(Math.random() * dramaQuotes.length)];
+    setDramaMoments(prev => [newDrama, ...prev.slice(0, 4)]);
+    
+    if (window.Swal) {
+      window.Swal.fire({
+        title: '&#127917; Drama Queen Moment',
+        html: `
+          <div style="text-align: center; padding: 20px;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">&#129397;</div>
+            <p style="font-size: 1.1rem; color: #8b5cf6; margin-bottom: 1rem;">
+              ${newDrama}
+            </p>
+            <p style="font-style: italic; color: #666; font-size: 0.9rem;">
+              "And I love every dramatic second of it" &#128557;
+            </p>
+          </div>
+        `,
+        confirmButtonText: "&#129325; Stop calling me out!",
+        confirmButtonColor: '#8b5cf6',
+        timer: 5000,
+        timerProgressBar: true
+      });
+    }
+  };
+
+  const toggleCozyMode = () => {
+    setCozyVibes(!cozyVibes);
+    
+    if (window.Swal) {
+      window.Swal.fire({
+        title: cozyVibes ? '&#127968; Leaving Cozy Mode' : '&#127968; Entering Cozy Mode',
+        html: `
+          <div style="text-align: center; padding: 20px;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">${cozyVibes ? '&#127968;' : '&#129303;'}</div>
+            <p style="font-size: 1.1rem; color: #f59e0b; margin-bottom: 1rem;">
+              ${cozyVibes ? 
+                'Time to be productive... maybe clean something? &#128567;' : 
+                'Fresh covers, comfy clothes, and countdown vibes &#129303;'
+              }
+            </p>
+            <p style="font-style: italic; color: #666; font-size: 0.9rem;">
+              "You make everything feel like home" &#127968;&#10084;
+            </p>
+          </div>
+        `,
+        confirmButtonText: cozyVibes ? "&#128170; Let's go!" : "&#129303; So cozy",
+        confirmButtonColor: '#f59e0b',
+        timer: 3000,
+        timerProgressBar: true
+      });
+    }
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -199,6 +302,67 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
           </p>
         </div>
         
+        {/* Interactive Features Section */}
+        <div className="interactive-section">
+          <div className="interactive-grid">
+            
+            {/* Miss You Button */}
+            <div className={`interactive-card miss-you-card ${cozyVibes ? 'cozy-mode' : ''}`}>
+              <div className="card-header">
+                <h3><i className="fas fa-heart-broken"></i> Missing You</h3>
+              </div>
+              <div className="card-content">
+                <div className="miss-counter">
+                  <span className="counter-number">{missYouCount}</span>
+                  <span className="counter-label">times today</span>
+                </div>
+                <button className="interactive-btn miss-btn" onClick={sendMissYou}>
+                  &#128557; Send "I Miss You"
+                </button>
+                <p className="card-subtitle">Because distance is dramatic</p>
+              </div>
+            </div>
+
+            {/* Drama Queen Moments */}
+            <div className={`interactive-card drama-card ${cozyVibes ? 'cozy-mode' : ''}`}>
+              <div className="card-header">
+                <h3><i className="fas fa-theater-masks"></i> Drama Queen Moments</h3>
+              </div>
+              <div className="card-content">
+                <button className="interactive-btn drama-btn" onClick={triggerDramaMoment}>
+                  &#129397; Trigger Drama Mode
+                </button>
+                <div className="drama-moments">
+                  {dramaMoments.slice(0, 2).map((moment, index) => (
+                    <div key={index} className="drama-item">
+                      <small dangerouslySetInnerHTML={{__html: moment}}></small>
+                    </div>
+                  ))}
+                </div>
+                <p className="card-subtitle">"And I love every dramatic second"</p>
+              </div>
+            </div>
+
+            {/* Cozy Mode Toggle */}
+            <div className={`interactive-card cozy-card ${cozyVibes ? 'cozy-mode active' : ''}`}>
+              <div className="card-header">
+                <h3><i className="fas fa-home"></i> Cozy Vibes</h3>
+              </div>
+              <div className="card-content">
+                <button className="interactive-btn cozy-btn" onClick={toggleCozyMode}>
+                  {cozyVibes ? '&#128170; Exit Cozy Mode' : '&#129303; Enter Cozy Mode'}
+                </button>
+                <div className="cozy-status">
+                  <span className={`status-indicator ${cozyVibes ? 'active' : ''}`}>
+                    {cozyVibes ? 'Fresh covers & comfy vibes ✨' : 'Ready for cozy time?'}
+                  </span>
+                </div>
+                <p className="card-subtitle">Making everything feel like home</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
 
       </div>
     </div>
