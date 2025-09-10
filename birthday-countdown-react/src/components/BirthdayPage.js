@@ -13,6 +13,11 @@ const BirthdayPage = () => {
   const [videoError, setVideoError] = useState(false);
   const [spotifyError, setSpotifyError] = useState(false);
   const [spotifyLoaded, setSpotifyLoaded] = useState(false);
+  
+  // New interactive counters
+  const [hugCount, setHugCount] = useState(0);
+  const [kissCount, setKissCount] = useState(247); // Starting with all those kisses from chats!
+  const [emojiRain, setEmojiRain] = useState(false);
 
   const memories = [
     {
@@ -171,6 +176,83 @@ const BirthdayPage = () => {
     return () => clearTimeout(timer);
   }, [spotifyLoaded, spotifyError]);
 
+  // New interactive functions
+  const sendVirtualHug = () => {
+    setHugCount(prev => prev + 1);
+    launchConfetti();
+    Swal.fire({
+      title: '&#129303; Virtual Hug Sent!',
+      html: `
+        <div style="text-align: center; padding: 20px;">
+          <div style="font-size: 4rem; margin-bottom: 1rem;">&#129303;</div>
+          <p style="font-size: 1.2rem; color: #d63384; margin-bottom: 1rem;">
+            Hug #${hugCount + 1} delivered with love! &#128149;
+          </p>
+          <p style="font-style: italic; color: #666;">
+            "If I could teleport right now, I'd be in your arms already" &#129397;
+          </p>
+        </div>
+      `,
+      confirmButtonText: "Aww, I felt that! &#128583;",
+      timer: 3000,
+      timerProgressBar: true
+    });
+  };
+
+  const sendKisses = () => {
+    setKissCount(prev => prev + 10);
+    setEmojiRain(true);
+    setTimeout(() => setEmojiRain(false), 3000);
+    
+    Swal.fire({
+      title: '&#128522; Kisses Sent!',
+      html: `
+        <div style="text-align: center; padding: 20px;">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">&#128522;&#128522;&#128522;&#128522;&#128522;&#128522;&#128522;&#128522;&#128522;&#128522;</div>
+          <p style="font-size: 1.2rem; color: #d63384; margin-bottom: 1rem;">
+            +10 kisses added! Total: ${kissCount + 10} &#128139;
+          </p>
+          <p style="font-style: italic; color: #666;">
+            "I want repayment for all those kisses when I see you"
+          </p>
+          <small style="color: #999;">Repayment due: x10 when we meet! &#128579;</small>
+        </div>
+      `,
+      confirmButtonText: "Can't wait to repay them!",
+      timer: 4000,
+      timerProgressBar: true
+    });
+  };
+
+  const triggerEmojiCelebration = () => {
+    setEmojiRain(true);
+    setTimeout(() => setEmojiRain(false), 4000);
+    
+    const chelynnEmojis = ['&#129397;', '&#128557;', '&#129303;', '&#10084;', '&#128522;', '&#129325;', '&#128583;'];
+    const randomEmoji = chelynnEmojis[Math.floor(Math.random() * chelynnEmojis.length)];
+    
+    Swal.fire({
+      title: `${randomEmoji} Che-lynn's Signature Reactions ${randomEmoji}`,
+      html: `
+        <div style="text-align: center; padding: 20px;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">${randomEmoji}${randomEmoji}${randomEmoji}${randomEmoji}${randomEmoji}</div>
+          <p style="font-size: 1.2rem; color: #d63384; margin-bottom: 1rem;">
+            "The way you react to everything with crying emojis is so endearing!" 
+          </p>
+          <div style="font-size: 1.5rem; margin: 1rem 0;">
+            &#129397; Auwww Counter: ${Math.floor(Math.random() * 50) + 100}
+          </div>
+          <p style="font-style: italic; color: #666;">
+            Your adorable reactions make every conversation brighter! &#10024;
+          </p>
+        </div>
+      `,
+      confirmButtonText: "Auwww you noticed! &#129397;",
+      timer: 5000,
+      timerProgressBar: true
+    });
+  };
+
   const VideoFallback = () => (
     <div className="video-fallback" style={{
       background: 'linear-gradient(135deg, #ff6b9d, #ffa8cc)',
@@ -247,6 +329,18 @@ const BirthdayPage = () => {
         <i className="fas fa-heart"></i>
         <i className="fas fa-star"></i>
         <i className="fas fa-star"></i>
+        {emojiRain && (
+          <>
+            <span className="emoji-rain">&#129397;</span>
+            <span className="emoji-rain">&#128557;</span>
+            <span className="emoji-rain">&#129303;</span>
+            <span className="emoji-rain">&#10084;</span>
+            <span className="emoji-rain">&#128522;</span>
+            <span className="emoji-rain">&#129325;</span>
+            <span className="emoji-rain">&#128583;</span>
+            <span className="emoji-rain">&#128149;</span>
+          </>
+        )}
       </div>
       
       <div className="container birthday-container">
@@ -288,7 +382,6 @@ const BirthdayPage = () => {
                     onError={handleVideoError}
                   >
                     <source src="/video.mp4" type="video/mp4" />
-                    <source src="./video.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                   <div className="video-overlay">
@@ -381,6 +474,120 @@ const BirthdayPage = () => {
                 <i className="fas fa-heartbeat"></i>
                 <span>Heartbeats of happiness: <strong>{birthdayFacts.heartbeats}</strong></span>
               </div>
+            </div>
+          </div>
+
+          {/* Virtual Hug & Kiss Counter */}
+          <div className="celebration-card hug-kiss-card">
+            <div className="card-header">
+              <h2><i className="fas fa-heart"></i> Virtual Hugs & Kisses</h2>
+            </div>
+            <div className="card-content">
+              <div className="hug-kiss-stats">
+                <div className="stat-item">
+                  <span className="stat-emoji">&#129303;</span>
+                  <span className="stat-label">Hugs Sent</span>
+                  <span className="stat-number">{hugCount}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-emoji">&#128522;</span>
+                  <span className="stat-label">Kisses Collected</span>
+                  <span className="stat-number">{kissCount}</span>
+                </div>
+              </div>
+              <div className="interaction-buttons">
+                <button className="hug-btn" onClick={sendVirtualHug}>
+                  <i className="fas fa-heart"></i>
+                  Send Virtual Hug
+                </button>
+                <button className="kiss-btn" onClick={sendKisses}>
+                  <i className="fas fa-kiss"></i>
+                  Send Kisses (x10)
+                </button>
+              </div>
+              <p className="repayment-note">
+                "I miss you too... more than I probably should" &#128583;
+                <br/>
+                <small>Repayment due when we meet: {kissCount * 10} kisses! &#128579;</small>
+              </p>
+            </div>
+          </div>
+
+          {/* Emoji Personality Gallery */}
+          <div className="celebration-card emoji-card">
+            <div className="card-header">
+              <h2><i className="fas fa-smile"></i> Your Signature Reactions</h2>
+            </div>
+            <div className="card-content">
+              <div className="emoji-gallery">
+                <div className="emoji-item">
+                  <span className="big-emoji">&#129397;</span>
+                  <span className="emoji-label">Auwww Moments</span>
+                </div>
+                <div className="emoji-item">
+                  <span className="big-emoji">&#128557;</span>
+                  <span className="emoji-label">Signature Reaction</span>
+                </div>
+                <div className="emoji-item">
+                  <span className="big-emoji">&#129303;</span>
+                  <span className="emoji-label">Virtual Hugs</span>
+                </div>
+                <div className="emoji-item">
+                  <span className="big-emoji">&#129325;</span>
+                  <span className="emoji-label">Cute & Shy</span>
+                </div>
+              </div>
+              <button className="emoji-celebration-btn" onClick={triggerEmojiCelebration}>
+                <i className="fas fa-star"></i>
+                Celebrate Your Cuteness!
+              </button>
+              <p className="emoji-note">
+                "The way you react to everything is so endearing!"
+              </p>
+            </div>
+          </div>
+
+          {/* Cozy Moments Corner */}
+          <div className="celebration-card cozy-card">
+            <div className="card-header">
+              <h2><i className="fas fa-coffee"></i> Cozy Moments</h2>
+            </div>
+            <div className="card-content">
+              <div className="cozy-items">
+                <div className="cozy-item">
+                  <i className="fas fa-mug-hot"></i>
+                  <div className="cozy-text">
+                    <strong>Perfect Rooibos</strong>
+                    <small>With milk & 2 sugars</small>
+                  </div>
+                </div>
+                <div className="cozy-item">
+                  <i className="fas fa-bath"></i>
+                  <div className="cozy-text">
+                    <strong>Relaxing Baths</strong>
+                    <small>"It was very very nice"</small>
+                  </div>
+                </div>
+                <div className="cozy-item">
+                  <i className="fas fa-bed"></i>
+                  <div className="cozy-text">
+                    <strong>Fresh Covers</strong>
+                    <small>"Fresh covers always hit different"</small>
+                  </div>
+                </div>
+                <div className="cozy-item">
+                  <i className="fas fa-moon"></i>
+                  <div className="cozy-text">
+                    <strong>Peaceful Nights</strong>
+                    <small>Away from Friday music</small>
+                  </div>
+                </div>
+              </div>
+              <p className="cozy-note">
+                All your favorite comfort moments
+                <br/>
+                <small>"My simple girl"</small>
+              </p>
             </div>
           </div>
         </div>

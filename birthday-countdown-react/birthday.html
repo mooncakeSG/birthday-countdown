@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Beautiful! 🎂</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body class="birthday-page">
+    <div class="confetti-container"></div>
+    
+    <div class="floating-hearts celebration">
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+    </div>
+    
+    <div class="container birthday-container">
+        <header class="birthday-header">
+            <h1 class="birthday-title">
+                🎉 Happy Birthday, Beautiful! 🎂
+            </h1>
+            <p class="birthday-subtitle">
+                Today is all about celebrating YOU! 💕
+            </p>
+        </header>
+        
+        <div class="celebration-grid">
+            <!-- Birthday Message Section -->
+            <div class="celebration-card message-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-heart"></i> A Special Message</h2>
+                </div>
+                <div class="card-content">
+                    <p class="birthday-message">
+                        Another year of being absolutely amazing! 🌟<br>
+                        You bring so much joy, laughter, and love into this world.<br>
+                        I hope your special day is filled with everything that makes you smile! 💖
+                    </p>
+                    <button class="memory-btn" onclick="showMemories()">
+                        <i class="fas fa-photo-video"></i>
+                        View Our Memories
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Spotify Playlist Section -->
+            <div class="celebration-card spotify-card">
+                <div class="card-header">
+                    <h2><i class="fab fa-spotify"></i> Your Birthday Playlist</h2>
+                </div>
+                <div class="card-content">
+                    <div class="spotify-placeholder">
+                        <i class="fab fa-spotify spotify-icon"></i>
+                        <p>🎵 Your favorite songs are waiting! 🎵</p>
+                        <p class="spotify-note">
+                            (Replace this with your actual Spotify playlist embed)
+                        </p>
+                    </div>
+                    <!-- Uncomment and replace with actual Spotify embed -->
+                    <!--
+                    <iframe style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/playlist/YOUR_PLAYLIST_ID" 
+                            width="100%" height="352" frameBorder="0" 
+                            allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy"></iframe>
+                    -->
+                </div>
+            </div>
+            
+            <!-- Chart Section -->
+            <div class="celebration-card chart-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-bar"></i> Our Journey Together</h2>
+                </div>
+                <div class="card-content">
+                    <canvas id="memoryChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Fun Facts Section -->
+            <div class="celebration-card facts-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-birthday-cake"></i> Birthday Facts</h2>
+                </div>
+                <div class="card-content">
+                    <div class="fact-item">
+                        <i class="fas fa-gift"></i>
+                        <span>Days of pure awesomeness: <strong id="age-days">0</strong></span>
+                    </div>
+                    <div class="fact-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Hours of being incredible: <strong id="age-hours">0</strong></span>
+                    </div>
+                    <div class="fact-item">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Heartbeats of happiness: <strong id="heartbeats">0</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="birthday-actions">
+            <button class="celebration-btn" onclick="launchConfetti()">
+                <i class="fas fa-rocket"></i>
+                More Confetti!
+            </button>
+            <button class="celebration-btn" onclick="showSurprise()">
+                <i class="fas fa-surprise"></i>
+                Special Surprise
+            </button>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 

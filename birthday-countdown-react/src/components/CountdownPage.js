@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import FutureMemories from './FutureMemories';
 
 const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
   const [timeLeft, setTimeLeft] = useState({
@@ -12,8 +13,15 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
   
   // New interactive features based on chat history
   const [missYouCount, setMissYouCount] = useState(0);
-  const [dramaMoments, setDramaMoments] = useState([]);
-  const [cozyVibes, setCozyVibes] = useState(false);
+  const [missYouHistory, setMissYouHistory] = useState([]);
+  const [monthlyStats, setMonthlyStats] = useState({});
+  
+  // Background music state
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [audioRef, setAudioRef] = useState(null);
+  
+  // Navigation state
+  const [activeSection, setActiveSection] = useState('countdown');
 
   // Daily messages object - organized by date
   const dailyMessages = useMemo(() => ({
@@ -47,18 +55,18 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
     '2025-09-30': "Last September message: One month until your birthday and I'm already emotional about it 😭 October, here we come! 🎂",
     
     // October 2025 - Birthday Month!
-    '2025-10-01': "BIRTHDAY MONTH IS HERE! 🎂✨👑 30 days until we celebrate the most wonderful person in existence!",
-    '2025-10-02': "Your morning routine in birthday month probably includes extra excitement. The countdown begins now! 🌅🎉",
-    '2025-10-03': "28 days until your birthday and I'm starting to vibrate with anticipation. This is going to be EPIC 🎂⚡",
-    '2025-10-05': "Your way of organizing things while crying happy tears about your birthday month is so endearing 😭🫂",
-    '2025-10-10': "21 days until your birthday! Your late-night planning sessions are probably including gift ideas for everyone else 📱😅",
-    '2025-10-15': "16 days until your birthday! Halfway through October and the anticipation is killing me in the best way 🎉⚡",
-    '2025-10-20': "11 days until your birthday! Your dramatic excitement about the countdown is giving me butterflies 😭🦋",
-    '2025-10-25': "6 days until your birthday! Purple Hearts vibes: 'This feels right' - celebrating you always feels right 💜🎂",
-    '2025-10-28': "3 days until your birthday! The Lake House energy: Some moments are worth waiting for - this is one of them 💌✨",
-    '2025-10-29': "2 days until your birthday! Your cleaning frenzy is probably in overdrive preparing for celebration mode 😅🧹",
-    '2025-10-30': "1 day until your birthday! Tomorrow we celebrate the most amazing, caring, dramatically perfect person ever 😭❤️ I'm so ready to spoil you!",
-    '2025-10-31': "HAPPY BIRTHDAY CHE-LYNN! 🎂✨👑 Today is all about celebrating YOU - your beautiful heart, your caring spirit, your dramatic perfection, and the way you make everything feel like home. You deserve all the love, all the joy, and all the perfectly organized birthday magic! Here's to another year of your wonderful chaos 😭❤️🫂 I love you so much it makes me dramatic too!"
+'2025-10-01': "BIRTHDAY MONTH IS HERE! 🎂✨👑 30 days until we celebrate the star of the show!",
+'2025-10-02': "Your morning routine in birthday month probably comes with extra sparkle. The countdown is officially on! 🌅🎉",
+'2025-10-03': "28 days to go and I’m already buzzing with excitement. This birthday is going to be unforgettable 🎂⚡",
+'2025-10-05': "Only you could organize chaos while crying happy tears over your own birthday month 😭🫂",
+'2025-10-10': "21 days left! Knowing you, those late-night plans include gifts for everyone else instead of yourself 📱😅",
+'2025-10-15': "16 days until the big day! Halfway through October and the anticipation is reaching peak levels 🎉⚡",
+'2025-10-20': "11 days left! Your dramatic countdown commentary is giving me all the butterflies 😭🦋",
+'2025-10-25': "6 days away! Purple Hearts vibes: 'This feels right' - celebrating you always feels right 💜🎂",
+'2025-10-28': "3 days left! Lake House energy: some moments are worth waiting for, and this one definitely is 💌✨",
+'2025-10-29': "2 days to go! I bet your cleaning frenzy is officially in turbo mode for celebration prep 😅🧹",
+'2025-10-30': "1 day away! Tomorrow is all about the most dramatic, organized, and amazing person I know 😭❤️ Get ready to be spoiled!",
+'2025-10-31': "HAPPY BIRTHDAY CHE-LYNN! 🎂✨👑 Today celebrates your caring spirit, dramatic perfection, and the way you make every space feel like home. You deserve every ounce of joy, every laugh, and all the perfectly organized birthday magic 🫂💜🎉"
   }), []);
 
   const getDailyMessage = useCallback(() => {
@@ -86,9 +94,107 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
     }
   }, [dailyMessages]);
 
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('missYouHistory');
+    const savedStats = localStorage.getItem('monthlyStats');
+    
+    if (savedHistory) {
+      const history = JSON.parse(savedHistory);
+      setMissYouHistory(history);
+      
+      // Calculate today's count from history
+      const today = new Date().toDateString();
+      const todayCount = history.filter(entry => entry.date === today).length;
+      setMissYouCount(todayCount);
+    }
+    
+    if (savedStats) {
+      setMonthlyStats(JSON.parse(savedStats));
+    }
+  }, []);
+
+  // Initialize background music
+  useEffect(() => {
+    const audio = new Audio('/background-music.mp3');
+    audio.loop = true;
+    audio.volume = 0.3; // Set volume to 30%
+    setAudioRef(audio);
+    
+    // Cleanup on unmount
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
+  }, []);
+
+  // Music control functions
+  const toggleMusic = () => {
+    if (audioRef) {
+      if (isMusicPlaying) {
+        audioRef.pause();
+        setIsMusicPlaying(false);
+      } else {
+        audioRef.play().catch(error => {
+          console.log('Autoplay prevented:', error);
+          // Show user-friendly message
+          if (window.Swal) {
+            window.Swal.fire({
+              title: '🎵 Music Ready!',
+              text: 'Click the play button to start the background music',
+              icon: 'info',
+              confirmButtonText: 'Got it!',
+              timer: 3000
+            });
+          }
+        });
+        setIsMusicPlaying(true);
+      }
+    }
+  };
+
+  // Calculate monthly statistics
+  const calculateMonthlyStats = (history) => {
+    const stats = {};
+    history.forEach(entry => {
+      const date = new Date(entry.timestamp);
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      const monthName = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      
+      if (!stats[monthKey]) {
+        stats[monthKey] = { count: 0, name: monthName };
+      }
+      stats[monthKey].count++;
+    });
+    return stats;
+  };
+
   // New interactive functions based on chat history
   const sendMissYou = () => {
+    const now = new Date();
+    const today = now.toDateString();
+    const timestamp = now.getTime();
+    
+    const newEntry = {
+      date: today,
+      timestamp: timestamp,
+      response: ""
+    };
+    
+    const updatedHistory = [...missYouHistory, newEntry];
+    setMissYouHistory(updatedHistory);
     setMissYouCount(prev => prev + 1);
+    
+    // Calculate and update monthly stats
+    const newStats = calculateMonthlyStats(updatedHistory);
+    setMonthlyStats(newStats);
+    
+    // Save to localStorage
+    localStorage.setItem('missYouHistory', JSON.stringify(updatedHistory));
+    localStorage.setItem('monthlyStats', JSON.stringify(newStats));
+    
     const responses = [
       "I miss you too... so much it hurts &#128557;",
       "Why do you have to be so far away? &#129397;",
@@ -122,67 +228,19 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
     }
   };
 
-  const triggerDramaMoment = () => {
-    const dramaQuotes = [
-      "When you said 'I'm fine' but we both know you're not &#129397;",
-      "The way you cry at literally everything cute &#128557;",
-      "Your dramatic gasps during movies &#128561;",
-      "When you get emotional about organizing things &#128557;&#129303;",
-      "Your reaction to surprise gestures &#128557;&#128149;"
-    ];
-    
-    const newDrama = dramaQuotes[Math.floor(Math.random() * dramaQuotes.length)];
-    setDramaMoments(prev => [newDrama, ...prev.slice(0, 4)]);
-    
-    if (window.Swal) {
-      window.Swal.fire({
-        title: '&#127917; Drama Queen Moment',
-        html: `
-          <div style="text-align: center; padding: 20px;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">&#129397;</div>
-            <p style="font-size: 1.1rem; color: #8b5cf6; margin-bottom: 1rem;">
-              ${newDrama}
-            </p>
-            <p style="font-style: italic; color: #666; font-size: 0.9rem;">
-              "And I love every dramatic second of it" &#128557;
-            </p>
-          </div>
-        `,
-        confirmButtonText: "&#129325; Stop calling me out!",
-        confirmButtonColor: '#8b5cf6',
-        timer: 5000,
-        timerProgressBar: true
-      });
-    }
+  // Get top months with most misses
+  const getTopMonths = () => {
+    const sortedMonths = Object.entries(monthlyStats)
+      .sort(([,a], [,b]) => b.count - a.count)
+      .slice(0, 3);
+    return sortedMonths;
   };
 
-  const toggleCozyMode = () => {
-    setCozyVibes(!cozyVibes);
-    
-    if (window.Swal) {
-      window.Swal.fire({
-        title: cozyVibes ? '&#127968; Leaving Cozy Mode' : '&#127968; Entering Cozy Mode',
-        html: `
-          <div style="text-align: center; padding: 20px;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">${cozyVibes ? '&#127968;' : '&#129303;'}</div>
-            <p style="font-size: 1.1rem; color: #f59e0b; margin-bottom: 1rem;">
-              ${cozyVibes ? 
-                'Time to be productive... maybe clean something? &#128567;' : 
-                'Fresh covers, comfy clothes, and countdown vibes &#129303;'
-              }
-            </p>
-            <p style="font-style: italic; color: #666; font-size: 0.9rem;">
-              "You make everything feel like home" &#127968;&#10084;
-            </p>
-          </div>
-        `,
-        confirmButtonText: cozyVibes ? "&#128170; Let's go!" : "&#129303; So cozy",
-        confirmButtonColor: '#f59e0b',
-        timer: 3000,
-        timerProgressBar: true
-      });
-    }
+  // Get total miss count
+  const getTotalMissCount = () => {
+    return Object.values(monthlyStats).reduce((total, month) => total + month.count, 0);
   };
+
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -234,135 +292,173 @@ const CountdownPage = ({ birthdayDate, onBirthdayReached }) => {
           <p className="subtitle">
             {isOctoberCountdown() ? "The most wonderful time is almost here... 💫👑" : "A very special moment is coming... 🎉"}
           </p>
+          
+          {/* Navigation Menu */}
+          <nav className="page-navigation">
+            <button 
+              className={`nav-btn ${activeSection === 'countdown' ? 'active' : ''}`}
+              onClick={() => setActiveSection('countdown')}
+            >
+              <i className="fas fa-clock"></i>
+              <span>Countdown</span>
+            </button>
+            <button 
+              className={`nav-btn ${activeSection === 'memories' ? 'active' : ''}`}
+              onClick={() => setActiveSection('memories')}
+            >
+              <i className="fas fa-heart"></i>
+              <span>Future Memories</span>
+            </button>
+          </nav>
+          
+          {/* Background Music Control */}
+          <div className="music-control">
+            <button 
+              className={`music-btn ${isMusicPlaying ? 'playing' : ''}`}
+              onClick={toggleMusic}
+              title={isMusicPlaying ? 'Pause background music' : 'Play background music'}
+            >
+              <i className={`fas ${isMusicPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+              <span className="music-label">
+                {isMusicPlaying ? 'Pause Music' : 'Play Music'}
+              </span>
+            </button>
+            <div className="music-info">
+              <small>🎵 "You Stole The Show" - Sienna Spiro</small>
+            </div>
+          </div>
         </header>
 
-        {/* Daily Message Card */}
-        <div className="daily-message-container">
-          <div className={`daily-message-card ${isOctoberCountdown() ? 'birthday-month' : ''}`}>
-            <div className="message-header">
-              <h3>
-                <i className="fas fa-envelope-heart"></i>
-                {isOctoberCountdown() ? "✨ Special October Message ✨" : "💕 Today's Sweet Note 💕"}
-              </h3>
-              <div className="message-date">
-                {new Date().toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}
+        {/* Conditional Content Based on Active Section */}
+        {activeSection === 'countdown' && (
+          <>
+            {/* Daily Message Card */}
+            <div className="daily-message-container">
+              <div className={`daily-message-card ${isOctoberCountdown() ? 'birthday-month' : ''}`}>
+                <div className="message-header">
+                  <h3>
+                    <i className="fas fa-envelope-heart"></i>
+                    {isOctoberCountdown() ? "✨ Special October Message ✨" : "💕 Today's Sweet Note 💕"}
+                  </h3>
+                  <div className="message-date">
+                    {new Date().toLocaleDateString('en-US', { 
+                      weekday: 'long', 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </div>
+                </div>
+                <div className="message-content">
+                  <p className="daily-message-text">{dailyMessage}</p>
+                </div>
+                <div className="message-footer">
+                  <div className="message-signature">
+                    With all my love 💕
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="message-content">
-              <p className="daily-message-text">{dailyMessage}</p>
-            </div>
-            <div className="message-footer">
-              <div className="message-signature">
-                With all my love 💕
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="countdown-container">
-          <div className="countdown-display">
-            <div className="time-unit">
-              <div className="time-value">{String(timeLeft.days).padStart(2, '0')}</div>
-              <div className="time-label">Days</div>
-            </div>
-            <div className="time-separator">:</div>
-            <div className="time-unit">
-              <div className="time-value">{String(timeLeft.hours).padStart(2, '0')}</div>
-              <div className="time-label">Hours</div>
-            </div>
-            <div className="time-separator">:</div>
-            <div className="time-unit">
-              <div className="time-value">{String(timeLeft.minutes).padStart(2, '0')}</div>
-              <div className="time-label">Minutes</div>
-            </div>
-            <div className="time-separator">:</div>
-            <div className="time-unit">
-              <div className="time-value">{String(timeLeft.seconds).padStart(2, '0')}</div>
-              <div className="time-label">Seconds</div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="message-container">
-          <p className="countdown-message">
-            <i className="fas fa-sparkles"></i>
-            Until your most special day arrives!
-            <i className="fas fa-sparkles"></i>
-          </p>
-          <p className="love-message">
-            {isOctoberCountdown() ? 
-              "October magic is in the air... ✨🍂💫" : 
-              "Get ready for something absolutely wonderful! 💖"
-            }
-          </p>
-        </div>
-        
-        {/* Interactive Features Section */}
-        <div className="interactive-section">
-          <div className="interactive-grid">
             
-            {/* Miss You Button */}
-            <div className={`interactive-card miss-you-card ${cozyVibes ? 'cozy-mode' : ''}`}>
-              <div className="card-header">
-                <h3><i className="fas fa-heart-broken"></i> Missing You</h3>
-              </div>
-              <div className="card-content">
-                <div className="miss-counter">
-                  <span className="counter-number">{missYouCount}</span>
-                  <span className="counter-label">times today</span>
+            <div className="countdown-container">
+              <div className="countdown-display">
+                <div className="time-unit">
+                  <div className="time-value">{String(timeLeft.days).padStart(2, '0')}</div>
+                  <div className="time-label">Days</div>
                 </div>
-                <button className="interactive-btn miss-btn" onClick={sendMissYou}>
-                  &#128557; Send "I Miss You"
-                </button>
-                <p className="card-subtitle">Because distance is dramatic</p>
+                <div className="time-separator">:</div>
+                <div className="time-unit">
+                  <div className="time-value">{String(timeLeft.hours).padStart(2, '0')}</div>
+                  <div className="time-label">Hours</div>
+                </div>
+                <div className="time-separator">:</div>
+                <div className="time-unit">
+                  <div className="time-value">{String(timeLeft.minutes).padStart(2, '0')}</div>
+                  <div className="time-label">Minutes</div>
+                </div>
+                <div className="time-separator">:</div>
+                <div className="time-unit">
+                  <div className="time-value">{String(timeLeft.seconds).padStart(2, '0')}</div>
+                  <div className="time-label">Seconds</div>
+                </div>
               </div>
             </div>
-
-            {/* Drama Queen Moments */}
-            <div className={`interactive-card drama-card ${cozyVibes ? 'cozy-mode' : ''}`}>
-              <div className="card-header">
-                <h3><i className="fas fa-theater-masks"></i> Drama Queen Moments</h3>
-              </div>
-              <div className="card-content">
-                <button className="interactive-btn drama-btn" onClick={triggerDramaMoment}>
-                  &#129397; Trigger Drama Mode
-                </button>
-                <div className="drama-moments">
-                  {dramaMoments.slice(0, 2).map((moment, index) => (
-                    <div key={index} className="drama-item">
-                      <small dangerouslySetInnerHTML={{__html: moment}}></small>
+            
+            <div className="message-container">
+              <p className="countdown-message">
+                <i className="fas fa-sparkles"></i>
+                Until your most special day arrives!
+                <i className="fas fa-sparkles"></i>
+              </p>
+              <p className="love-message">
+                {isOctoberCountdown() ? 
+                  "October magic is in the air... ✨🍂💫" : 
+                  "Get ready for something absolutely wonderful! 💖"
+                }
+              </p>
+            </div>
+            
+            {/* Interactive Features Section */}
+            <div className="interactive-section">
+              <div className="interactive-grid">
+                
+                {/* Enhanced Miss You Card */}
+                <div className="interactive-card miss-you-card enhanced">
+                  <div className="card-header">
+                    <h3><i className="fas fa-heart-broken"></i> Missing You</h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="stats-grid">
+                      <div className="stat-item today">
+                        <div className="stat-number">{missYouCount}</div>
+                        <div className="stat-label">Today</div>
+                      </div>
+                      <div className="stat-item total">
+                        <div className="stat-number">{getTotalMissCount()}</div>
+                        <div className="stat-label">Total</div>
+                      </div>
                     </div>
-                  ))}
+                    
+                    <button className="interactive-btn miss-btn" onClick={sendMissYou}>
+                      &#128557; Send "I Miss You"
+                    </button>
+                    
+                    {Object.keys(monthlyStats).length > 0 && (
+                      <div className="monthly-stats">
+                        <h4><i className="fas fa-chart-line"></i> Monthly Misses</h4>
+                        <div className="top-months">
+                          {getTopMonths().map(([monthKey, data], index) => (
+                            <div key={monthKey} className={`month-item rank-${index + 1}`}>
+                              <div className="month-rank">#{index + 1}</div>
+                              <div className="month-info">
+                                <div className="month-name">{data.name}</div>
+                                <div className="month-count">{data.count} misses</div>
+                              </div>
+                              <div className="month-bar">
+                                <div 
+                                  className="month-fill" 
+                                  style={{ 
+                                    width: `${(data.count / Math.max(...Object.values(monthlyStats).map(m => m.count))) * 100}%` 
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    <p className="card-subtitle">Because distance is dramatic</p>
+                  </div>
                 </div>
-                <p className="card-subtitle">"And I love every dramatic second"</p>
+
               </div>
             </div>
+          </>
+        )}
 
-            {/* Cozy Mode Toggle */}
-            <div className={`interactive-card cozy-card ${cozyVibes ? 'cozy-mode active' : ''}`}>
-              <div className="card-header">
-                <h3><i className="fas fa-home"></i> Cozy Vibes</h3>
-              </div>
-              <div className="card-content">
-                <button className="interactive-btn cozy-btn" onClick={toggleCozyMode}>
-                  {cozyVibes ? '&#128170; Exit Cozy Mode' : '&#129303; Enter Cozy Mode'}
-                </button>
-                <div className="cozy-status">
-                  <span className={`status-indicator ${cozyVibes ? 'active' : ''}`}>
-                    {cozyVibes ? 'Fresh covers & comfy vibes ✨' : 'Ready for cozy time?'}
-                  </span>
-                </div>
-                <p className="card-subtitle">Making everything feel like home</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
+        {/* Future Memories Wall Section */}
+        {activeSection === 'memories' && <FutureMemories />}
 
       </div>
     </div>

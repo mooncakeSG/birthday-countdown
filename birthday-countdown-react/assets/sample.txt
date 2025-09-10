@@ -1,0 +1,34 @@
+🎂 Assets Folder 💕
+
+This folder is for your additional assets:
+
+📸 Images:
+- Add photos of you two together
+- Birthday cake images
+- Heart/flower decorations
+- Background images
+
+🎵 Audio Files:
+- Birthday songs
+- Her favorite music
+- Special voice messages
+
+💡 Usage Examples:
+
+For images in HTML:
+<img src="assets/our-photo.jpg" alt="Our special moment">
+
+For background images in CSS:
+background-image: url('assets/background.jpg');
+
+For audio in HTML:
+<audio controls>
+  <source src="assets/birthday-song.mp3" type="audio/mpeg">
+</audio>
+
+🎨 Recommended formats:
+- Images: .jpg, .png, .gif, .webp
+- Audio: .mp3, .wav, .ogg
+- Keep file sizes reasonable for web loading
+
+Have fun personalizing your birthday app! 💖 
