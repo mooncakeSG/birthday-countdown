@@ -5,7 +5,8 @@
   "scripts": {
     "build": "cd birthday-countdown-react && npm install && npm run build",
     "start": "cd birthday-countdown-react && npm start",
-    "dev": "cd birthday-countdown-react && npm start"
+    "dev": "cd birthday-countdown-react && npm start",
+    "install": "cd birthday-countdown-react && npm install"
   },
   "engines": {
     "node": ">=16.0.0"
